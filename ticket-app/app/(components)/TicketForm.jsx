@@ -1,5 +1,6 @@
 "use client";
 
+//import { POST } from "@/api/Tickets/route";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
@@ -17,8 +18,20 @@ const TicketForm = ({ ticket }) => {
 
   const [formData, setFormData] = useState(startingTicketData);
 
-  const handleSubmit = () => {
-    console.log("submitted");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const res = await fetch("/api/Tickets/", {
+      method: "POST",
+      body: JSON.stringify({ formData }),
+      "content-type": "application/json",
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to create Ticket.");
+    }
+
+    router.refresh();
+    router.push("/");
   };
 
   const handleChange = (e) => {
@@ -51,18 +64,18 @@ const TicketForm = ({ ticket }) => {
 
         <label>Description</label>
         <textarea
-          id="Description"
-          name="Description"
+          id="description"
+          name="description"
           onChange={handleChange}
           required={true}
-          value={formData.Description}
+          value={formData.description}
           rows="5"
         />
 
         <label>Category</label>
         <select
-          name="Category"
-          value={formData.Category}
+          name="category"
+          value={formData.category}
           onChange={handleChange}
         >
           <option value="Hardware Problem">Hardware Problem</option>
@@ -133,7 +146,7 @@ const TicketForm = ({ ticket }) => {
           id="progress"
           name="progress"
           value={formData.progress}
-          min="o"
+          min="0"
           max="100"
           onChange={handleChange}
         />
@@ -143,7 +156,7 @@ const TicketForm = ({ ticket }) => {
           <option value="started">Started</option>
           <option value="done">Done</option>
         </select>
-        <input type="submit" className="btn" value="Create ticket" />
+        <input type="submit" className="btn max-w-xs" value="Create ticket" />
       </form>
     </div>
   );
