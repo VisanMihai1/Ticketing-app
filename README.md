@@ -5,7 +5,7 @@ Project tech Stack:
 - Tailwind CSS
 - Next.js
 - Node.js
-- MongoDB
+- MongoDB / Mongoose
 - Vercel (site hosting provider)
 
 If you dont already have those technologies setup, here are some useful links:
@@ -31,6 +31,7 @@ Ulterior, vom naviga in ticket-app -> app -> globals.css (vom sterge tot si vom 
 
 ```
 @import "tailwindcss";
+npm install mongodb mongoose
 ```
 
 Vom crea un nou folder in ticket-app -> app, numit "TicketPage" (aici vom avea paginile aplicatiei noastre). Aici vom realiza un fisier nou, numit "page.jsx". De asemenea, redenumim fisierul "page.js" (/ticket-app/app/page.js) in "page.jsx".
@@ -44,3 +45,7 @@ const Dashboard = () => {
 
 export default Dashboard;
 ```
+
+### API:
+
+formData - variabila folosita in API Calls
