@@ -35,36 +35,44 @@ const EditTicketForm = ({ ticket }) => {
     }));
   };
 
-const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
   e.preventDefault();
 
-  if (EDITMODE) {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || window.location.origin}/api/Tickets/${ticket._id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ formData }),
-    });
-    if (!res.ok) {
-      throw new Error("Failed to update ticket");
-    }
-  } else {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || window.location.origin}/api/Tickets`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ formData }),
-    });
-    if (!res.ok) {
-      throw new Error("Failed to create ticket");
-    }
-  }
+  try {
+    if (EDITMODE) {
+      const res = await fetch(`/api/Tickets/${ticket._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ formData }),
+      });
 
-  router.refresh();
-  router.push("/");
+      if (!res.ok) {
+        throw new Error(`Failed to update ticket: ${res.status}`);
+      }
+    } else {
+      const res = await fetch("/api/Tickets", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ formData }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Failed to create ticket: ${res.status}`);
+      }
+    }
+
+    router.refresh();
+    router.push("/");
+  } catch (error) {
+    console.error("Error submitting form:", error);
+    // You could add user feedback here like an alert or error message
+  }
 };
+
   const categories = [
     "Hardware Problem",
     "Software Problem",
