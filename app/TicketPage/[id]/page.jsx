@@ -2,17 +2,18 @@ import EditTicketForm from "@/app/(components)/EditTicketForm";
 
 const getTicketById = async (id) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/Tickets/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/Tickets/${id}`, {
       cache: "no-store",
     });
 
     if (!res.ok) {
-      throw new Error("Failed to fetch topic");
+      throw new Error(`Failed to fetch ticket: ${res.status}`);
     }
 
     return res.json();
   } catch (error) {
-    console.log(error);
+    console.error("Error loading ticket:", error);
+    throw error;
   }
 };
 
