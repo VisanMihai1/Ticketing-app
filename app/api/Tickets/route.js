@@ -19,7 +19,6 @@ export async function POST(req) {
     const body = await req.json();
     const ticketData = body.formData;
 
-    // Check if formData exists
     if (!ticketData) {
       return NextResponse.json(
         { error: "No ticket data provided" },
@@ -27,8 +26,8 @@ export async function POST(req) {
       );
     }
 
-    // Required fields array
-    const requiredFields = ['title', 'description', 'category', 'priority', 'progress', 'status'];
+    // Required fields array - progress removed from here
+    const requiredFields = ['title', 'description', 'category', 'priority', 'status'];
     
     // Check for missing fields
     const missingFields = requiredFields.filter(field => !ticketData[field]);
@@ -43,14 +42,7 @@ export async function POST(req) {
       );
     }
 
-    // Validate field types and values
-    if (typeof ticketData.priority !== 'number' || ticketData.priority < 0) {
-      return NextResponse.json(
-        { error: "Priority must be a positive number" },
-        { status: 400 }
-      );
-    }
-
+    // Validate progress separately since 0 is a valid value
     if (typeof ticketData.progress !== 'number' || ticketData.progress < 0 || ticketData.progress > 100) {
       return NextResponse.json(
         { error: "Progress must be a number between 0 and 100" },
