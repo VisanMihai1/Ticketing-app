@@ -25,17 +25,24 @@ const EditTicketForm = ({ ticket }) => {
 
   const [formData, setFormData] = useState(startingTicketData);
 
-  const handleChange = (e) => {
-    const value = e.target.value;
-    const name = e.target.name;
+const handleChange = (e) => {
+  let value = e.target.value;
+  const name = e.target.name;
 
-    setFormData((preState) => ({
-      ...preState,
-      [name]: value,
-    }));
-  };
+  // Convert priority and progress to numbers
+  if (name === "priority") {
+    value = Number(value);
+  } else if (name === "progress") {
+    value = Number(value);
+  }
 
-  const handleSubmit = async (e) => {
+  setFormData((prevState) => ({
+    ...prevState,
+    [name]: value,
+  }));
+};
+
+ const handleSubmit = async (e) => {
   e.preventDefault();
 
   try {
@@ -48,8 +55,17 @@ const EditTicketForm = ({ ticket }) => {
         body: JSON.stringify({ formData }),
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
-        throw new Error(`Failed to update ticket: ${res.status}`);
+        throw new Error(
+          data.error || 
+          `Failed to update ticket: ${res.status} ${
+            data.missingFields ? 
+            `- Missing fields: ${data.missingFields.join(', ')}` : 
+            ''
+          }`
+        );
       }
     } else {
       const res = await fetch("/api/Tickets", {
@@ -60,8 +76,13 @@ const EditTicketForm = ({ ticket }) => {
         body: JSON.stringify({ formData }),
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
-        throw new Error(`Failed to create ticket: ${res.status}`);
+        throw new Error(
+          data.error || 
+          `Failed to create ticket: ${res.status}`
+        );
       }
     }
 
@@ -69,7 +90,7 @@ const EditTicketForm = ({ ticket }) => {
     router.push("/");
   } catch (error) {
     console.error("Error submitting form:", error);
-    // You could add user feedback here like an alert or error message
+    alert(error.message); // Show error to user
   }
 };
 

@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const Nav = () => {
   return (
-    <nav className="flex justify-between bg-nav p-4">
+    <nav className="flex justify-between items-center bg-nav p-4">
       <div className="flex items-center space-x-4">
         <Link href="/">
           <FontAwesomeIcon icon={faHome} className="icon" />
@@ -13,8 +13,13 @@ const Nav = () => {
           <FontAwesomeIcon icon={faTicket} className="icon" />
         </Link>
       </div>
-      <div>
-        <p className=" text-default-text">visanmihai21@stud.ase.ro</p>
+      
+      <div className="text-lg font-semibold text-text-light">
+        Inovații Verzi IT Center
+      </div>
+
+      <div className="text-text-light">
+        <p>visanmihai21@stud.ase.ro</p>
       </div>
     </nav>
   );
